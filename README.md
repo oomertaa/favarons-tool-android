@@ -183,18 +183,13 @@ database, so no device is needed.
 - `UiSmokeTest`: drives the real UI end to end (ingredient → recipe → scale →
   order → edit) in landscape, plus the narrow portrait layout.
 
-## 9. Font
+## 9. Look
 
-All text uses an Arial Narrow–style font, at the standard Material 3 sizes.
-Arial Narrow itself is a commercial font, so the app bundles **Liberation Sans
-Narrow** instead. It is free and metric-compatible with Arial Narrow (same
-character widths), and covers all Romanian diacritics. Its license is in
-`third_party/liberation-sans-narrow/`.
-
-If you own Arial Narrow (it comes with Microsoft Office) and want the original,
-copy `ARIALN.TTF` and `ARIALNB.TTF` over
-`app/src/main/res/font/app_font_regular.ttf` and `app_font_bold.ttf` (keep
-these names), then rebuild.
+- Text uses the system font at the Material 3 sizes × 1.15 (`FONT_SCALE` in
+  `ui/theme/Theme.kt`).
+- The navigation strip on the left has its own background and a shadow.
+- The *Mama Macaroana* logo is shown behind the pages, partly transparent
+  (`BACKGROUND_LOGO_ALPHA` in `ui/AppRoot.kt`).
 
 ## 10. Project layout
 

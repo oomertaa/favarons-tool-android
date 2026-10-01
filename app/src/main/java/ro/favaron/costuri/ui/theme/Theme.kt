@@ -8,10 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import ro.favaron.costuri.R
 
 private val Light = lightColorScheme(
     primary = Color(0xFF8B4A62),
@@ -27,6 +23,7 @@ private val Light = lightColorScheme(
     background = Color(0xFFFFF8F6),
     surface = Color(0xFFFFF8F6),
     surfaceVariant = Color(0xFFF3DDE1),
+    surfaceContainer = Color(0xFFF7E6EA),
     error = Color(0xFFBA1A1A),
     errorContainer = Color(0xFFFFDAD6),
 )
@@ -40,38 +37,30 @@ private val Dark = darkColorScheme(
     secondaryContainer = Color(0xFF5F401F),
     tertiary = Color(0xFFBCCD9A),
     tertiaryContainer = Color(0xFF3E4B25),
+    surfaceContainer = Color(0xFF2A2124),
 )
 
-/**
- * App font: Arial Narrow look (Liberation Sans Narrow, metric-compatible with
- * Arial Narrow). To use the original Arial Narrow instead, replace the two
- * files in res/font with ARIALN.TTF / ARIALNB.TTF renamed to
- * app_font_regular.ttf / app_font_bold.ttf.
- */
-val AppFont = FontFamily(
-    Font(R.font.app_font_regular, FontWeight.Normal),
-    Font(R.font.app_font_bold, FontWeight.Bold),
-)
+/** Text size multiplier over the Material 3 defaults (system font, slightly bigger). */
+const val FONT_SCALE = 1.15f
 
-/** Default Material 3 sizes and weights; only the font family is replaced. */
 private val AppTypography: Typography = Typography().let { base ->
-    fun TextStyle.app() = copy(fontFamily = AppFont)
+    fun TextStyle.bigger() = copy(fontSize = fontSize * FONT_SCALE, lineHeight = lineHeight * FONT_SCALE)
     base.copy(
-        displayLarge = base.displayLarge.app(),
-        displayMedium = base.displayMedium.app(),
-        displaySmall = base.displaySmall.app(),
-        headlineLarge = base.headlineLarge.app(),
-        headlineMedium = base.headlineMedium.app(),
-        headlineSmall = base.headlineSmall.app(),
-        titleLarge = base.titleLarge.app(),
-        titleMedium = base.titleMedium.app(),
-        titleSmall = base.titleSmall.app(),
-        bodyLarge = base.bodyLarge.app(),
-        bodyMedium = base.bodyMedium.app(),
-        bodySmall = base.bodySmall.app(),
-        labelLarge = base.labelLarge.app(),
-        labelMedium = base.labelMedium.app(),
-        labelSmall = base.labelSmall.app(),
+        displayLarge = base.displayLarge.bigger(),
+        displayMedium = base.displayMedium.bigger(),
+        displaySmall = base.displaySmall.bigger(),
+        headlineLarge = base.headlineLarge.bigger(),
+        headlineMedium = base.headlineMedium.bigger(),
+        headlineSmall = base.headlineSmall.bigger(),
+        titleLarge = base.titleLarge.bigger(),
+        titleMedium = base.titleMedium.bigger(),
+        titleSmall = base.titleSmall.bigger(),
+        bodyLarge = base.bodyLarge.bigger(),
+        bodyMedium = base.bodyMedium.bigger(),
+        bodySmall = base.bodySmall.bigger(),
+        labelLarge = base.labelLarge.bigger(),
+        labelMedium = base.labelMedium.bigger(),
+        labelSmall = base.labelSmall.bigger(),
     )
 }
 

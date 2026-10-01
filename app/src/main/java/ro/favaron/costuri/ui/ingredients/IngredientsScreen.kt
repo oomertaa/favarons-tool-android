@@ -75,7 +75,7 @@ fun IngredientsScreen(vm: IngredientsViewModel = viewModel(factory = AppViewMode
             Text(if (asc) "A→Z" else "Z→A", style = MaterialTheme.typography.labelLarge)
         }
         if (list.isEmpty()) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(Modifier.fillMaxSize().padding(top = 48.dp), contentAlignment = Alignment.TopCenter) {
                 Text(if (query.isBlank()) "Niciun ingredient. Apasă „Adaugă”." else "Nimic găsit.")
             }
         } else {

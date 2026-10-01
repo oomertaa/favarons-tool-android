@@ -77,7 +77,7 @@ fun RecipesScreen(vm: RecipesViewModel = viewModel(factory = AppViewModels.Facto
             Text(if (asc) "A→Z" else "Z→A", style = MaterialTheme.typography.labelLarge)
         }
         if (list.isEmpty()) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(Modifier.fillMaxSize().padding(top = 48.dp), contentAlignment = Alignment.TopCenter) {
                 Text(if (query.isBlank()) "Nicio rețetă. Apasă „Rețetă nouă”." else "Nimic găsit.")
             }
         } else {

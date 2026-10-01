@@ -98,11 +98,11 @@ fun HistoryScreen(vm: HistoryViewModel = viewModel(factory = AppViewModels.Facto
                 }
             }
         }
-        Box(Modifier.weight(1f)) {
+        Box(Modifier.weight(1f).fillMaxWidth()) {
             if (orders.isEmpty()) {
                 Text(
                     "Nicio comandă în perioada selectată.",
-                    modifier = Modifier.align(Alignment.Center),
+                    modifier = Modifier.align(Alignment.TopCenter).padding(top = 48.dp),
                 )
             } else {
                 LazyColumn(

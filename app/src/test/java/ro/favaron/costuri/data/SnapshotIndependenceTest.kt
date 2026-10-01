@@ -172,6 +172,34 @@ class SnapshotIndependenceTest {
     }
 
     @Test
+    fun scaling_recipe_does_not_change_history() = assertUnchanged {
+        live.scaleRecipe(cakeId, 20)
+    }
+
+    @Test
+    fun scale_button_multiplies_quantities_and_costs_but_plain_yield_edit_does_not() = runBlocking {
+        val before = cake()
+        assertBd("29.592", before.batchCost) // 5 + 7.992 + 15 + 1.6
+        live.scaleRecipe(cakeId, 15)
+        val s = cake()
+        assertEquals(15, s.recipe.yieldPieces)
+        val q = s.lines.associate { it.name to it.line.quantity }
+        assertBd("600", q["Făină"]!!)
+        assertBd("300", q["Unt"]!!)
+        assertBd("15", q["Cutie"]!!) // consumable, scaled
+        assertBd("4", q["Pahar"]!!) // fixed consumable unchanged
+        assertBd("43.588", s.batchCost) // 7.5 + 11.988 + 22.5 + 1.6
+        assertBd(before.recipe.sellingPrice!!.toPlainString(), s.recipe.sellingPrice!!) // price per piece unchanged
+
+        // a plain edit of the yield is only a correction: quantities stay
+        live.saveRecipe(s.recipe.copy(yieldPieces = 30), s.lines.map { it.line })
+        val c = cake()
+        assertEquals(30, c.recipe.yieldPieces)
+        assertEquals(s.lines.map { it.line.quantity }, c.lines.map { it.line.quantity })
+        assertEquals(s.batchCost, c.batchCost)
+    }
+
+    @Test
     fun deleting_recipe_does_not_change_history() = assertUnchanged {
         live.deleteRecipe(cakeId)
         assertTrue(recipes().isEmpty())

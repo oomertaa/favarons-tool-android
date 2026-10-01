@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -57,6 +58,7 @@ fun RecipesScreen(vm: RecipesViewModel = viewModel(factory = AppViewModels.Facto
     var editing by remember { mutableStateOf<RecipeView?>(null) }
     var creating by remember { mutableStateOf(false) }
     var deleting by remember { mutableStateOf<RecipeView?>(null) }
+    var scaling by remember { mutableStateOf<RecipeView?>(null) }
     val export = rememberCsvExport { vm.csv() }
 
     Column(Modifier.fillMaxSize()) {
@@ -85,7 +87,7 @@ fun RecipesScreen(vm: RecipesViewModel = viewModel(factory = AppViewModels.Facto
                 modifier = Modifier.fillMaxSize(),
             ) {
                 items(list, key = { it.recipe.id }) { r ->
-                    RecipeCard(r, onEdit = { editing = r }, onDelete = { deleting = r })
+                    RecipeCard(r, onEdit = { editing = r }, onScale = { scaling = r }, onDelete = { deleting = r })
                 }
             }
         }
@@ -105,6 +107,15 @@ fun RecipesScreen(vm: RecipesViewModel = viewModel(factory = AppViewModels.Facto
         )
     }
 
+    scaling?.let { r ->
+        ScaleRecipeDialog(
+            recipeName = r.recipe.name,
+            currentYield = r.recipe.yieldPieces,
+            onDismiss = { scaling = null },
+            onScale = { vm.scale(r.recipe.id, it) },
+        )
+    }
+
     deleting?.let { r ->
         ConfirmDialog(
             title = "Ștergi rețeta „${r.recipe.name}”?",
@@ -117,7 +128,7 @@ fun RecipesScreen(vm: RecipesViewModel = viewModel(factory = AppViewModels.Facto
 }
 
 @Composable
-private fun RecipeCard(r: RecipeView, onEdit: () -> Unit, onDelete: () -> Unit) {
+private fun RecipeCard(r: RecipeView, onEdit: () -> Unit, onScale: () -> Unit, onDelete: () -> Unit) {
     Card(Modifier.fillMaxWidth().clickable(onClick = onEdit)) {
         Row(Modifier.padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -146,6 +157,10 @@ private fun RecipeCard(r: RecipeView, onEdit: () -> Unit, onDelete: () -> Unit) 
                         )
                     }
                 }
+            }
+            OutlinedButton(onClick = onScale) {
+                Icon(Icons.Filled.Refresh, null)
+                Text(" Scalează")
             }
             IconButton(onClick = onEdit) { Icon(Icons.Filled.Edit, "Editează") }
             IconButton(onClick = onDelete) { Icon(Icons.Filled.Delete, "Șterge") }

@@ -109,7 +109,7 @@ Do not uninstall the app before updating. Uninstalling deletes the data.
 | Page | What it does |
 |---|---|
 | **Ingrediente** | Ingredients and consumables: name, unit (g / ml / buc), package quantity and price, *Consumabil* flag. Shows the price per g / ml / buc. Search and A→Z / Z→A sort. Deleting an ingredient that is used in recipes shows the affected recipes. Deletion is allowed, and those recipe lines are marked **lipsă**. |
-| **Rețete** | Recipes: name, yield (pieces per batch), optional selling price per piece, lines with quantities for the whole batch. Consumable lines can have *Cantitate fixă*. Shows line costs, batch cost, cost per piece and margin, all computed from current prices. *Adaugă ingredient* opens the same ingredient dialog and selects the new item. A recipe with **lipsă** lines cannot be sold until every such line is replaced or removed. |
+| **Rețete** | Recipes: name, yield (pieces per batch), optional selling price per piece, lines with quantities for the whole batch. Consumable lines can have *Cantitate fixă*. Shows line costs, batch cost, cost per piece and margin, all computed from current prices. *Adaugă ingredient* opens the same ingredient dialog and selects the new item. **Scalează** (on each recipe card and in the editor) changes the number of pieces **and** multiplies the line quantities, so the costs follow. Ingredients scale exactly, consumables are rounded up to whole pieces, and *Cantitate fixă* lines stay unchanged. Typing a new yield directly only corrects the number and leaves the quantities as they are. A recipe with **lipsă** lines cannot be sold until every such line is replaced or removed. |
 | **Vânzări** | Sales history. *Comandă nouă* builds an order from valid recipes (pieces, price override, quantity adjustments, customer, note, date). Saved orders are **frozen snapshots**: later changes to ingredients or recipes never affect them. Each order can be expanded, edited manually (*Editează / Salvează / Anulează*, marked *modificat manual*), rescaled per product (*Rescalează automat*) or deleted. The bottom panel shows totals and per-product totals for the selected date range. |
 
 Quantity scaling when selling P pieces of a recipe with yield Y:
@@ -178,10 +178,28 @@ database, so no device is needed.
   value, the summaries and the CSV unchanged. Also covers manual edits
   persisting without touching live data, recalculation using only stored
   values, and missing-ingredient handling.
-- `UiSmokeTest`: drives the real UI end to end (ingredient → recipe → order →
-  edit) in landscape, plus the narrow portrait layout.
+- `RecipeScalingTest`, plus Room tests: *Scalează* multiplies quantities and
+  costs, a plain yield edit does not, and scaling never changes history.
+- `UiSmokeTest`: drives the real UI end to end (ingredient → recipe → scale →
+  order → edit) in landscape, plus the narrow portrait layout.
 
-## 9. Project layout
+## 9. Font
+
+All text uses an Arial Narrow–style font at **12 sp**, with titles in bold.
+Arial Narrow itself is a commercial font, so the app bundles **Liberation Sans
+Narrow** instead. It is free and metric-compatible with Arial Narrow (same
+character widths), and covers all Romanian diacritics. Its license is in
+`third_party/liberation-sans-narrow/`.
+
+If you own Arial Narrow (it comes with Microsoft Office) and want the original,
+copy `ARIALN.TTF` and `ARIALNB.TTF` over
+`app/src/main/res/font/app_font_regular.ttf` and `app_font_bold.ttf` (keep
+these names), then rebuild.
+
+The size is in sp, so Android's *Settings → Display → Font size* still scales
+it. The size is set in one place, `APP_FONT_SIZE` in `ui/theme/Theme.kt`.
+
+## 10. Project layout
 
 ```
 app/src/main/java/ro/favaron/costuri/

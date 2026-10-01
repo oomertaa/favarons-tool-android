@@ -75,6 +75,20 @@ class UiSmokeTest {
         rule.waitUntil(5000) { rule.onAllNodesWithText("Tort").fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithText("20,00 RON").assertIsDisplayed()
 
+        // "Scalează" 10 -> 20 pieces: quantities and costs double, cost / piece stays
+        rule.onNodeWithText(" Scalează").performClick()
+        dialogField("Număr nou de bucăți").performTextReplacement("20")
+        rule.onNodeWithText("Cantitățile se înmulțesc cu 2").assertIsDisplayed()
+        rule.onNodeWithText("Scalează").performClick()
+        rule.waitUntil(5000) { rule.onAllNodesWithText("40,00 RON").fetchSemanticsNodes().isNotEmpty() }
+        rule.onNodeWithText("20 buc").assertIsDisplayed()
+        rule.onNodeWithText("2,00 RON").assertIsDisplayed()
+        // back to 10 so the order below keeps its expected values
+        rule.onNodeWithText(" Scalează").performClick()
+        dialogField("Număr nou de bucăți").performTextReplacement("10")
+        rule.onNodeWithText("Scalează").performClick()
+        rule.waitUntil(5000) { rule.onAllNodesWithText("20,00 RON").fetchSemanticsNodes().isNotEmpty() }
+
         // ---- Page 3: new order ----
         rule.onNodeWithText("Vânzări").performClick()
         rule.onNodeWithText(" Comandă nouă").performClick()

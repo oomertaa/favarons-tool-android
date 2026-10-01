@@ -37,6 +37,10 @@ class RecipesViewModel(private val repo: LiveRepository) : ViewModel() {
         viewModelScope.launch { repo.saveRecipe(recipe, lines) }
     }
 
+    fun scale(id: Long, newYield: Int) {
+        viewModelScope.launch { repo.scaleRecipe(id, newYield) }
+    }
+
     fun delete(id: Long) {
         viewModelScope.launch { repo.deleteRecipe(id) }
     }

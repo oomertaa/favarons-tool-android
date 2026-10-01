@@ -2,6 +2,7 @@ package ro.favaron.costuri.data
 
 import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
+import ro.favaron.costuri.domain.RecipeScaling
 
 /** Ingredients and recipes (LIVE domain). Never touches history tables. */
 class LiveRepository(private val db: AppDatabase) {
@@ -44,6 +45,25 @@ class LiveRepository(private val db: AppDatabase) {
         dao.deleteLinesOf(id)
         dao.insertLines(lines.mapIndexed { i, l -> l.copy(id = 0, recipeId = id, position = i) })
         id
+    }
+
+    /**
+     * "Scalează": sets the recipe to [newYield] pieces and scales the line
+     * quantities proportionally (see [RecipeScaling]). Fixed consumables stay as
+     * they are. Missing ("lipsă") lines are scaled as ingredients unless fixed.
+     */
+    suspend fun scaleRecipe(recipeId: Long, newYield: Int) = db.withTransaction {
+        require(newYield >= 1)
+        val rw = dao.getRecipes().single { it.recipe.id == recipeId }
+        val byId = dao.getIngredients().associateBy { it.id }
+        val old = rw.recipe.yieldPieces
+        val lines = rw.lines.sortedBy { it.position }.map { l ->
+            val ing = l.ingredientId?.let { byId[it] }
+            val consumable = ing?.isConsumable ?: false
+            val fixed = if (ing != null) consumable && l.fixedQuantity else l.fixedQuantity
+            l.copy(quantity = RecipeScaling.scaleQuantity(l.quantity, old, newYield, consumable, fixed))
+        }
+        saveRecipe(rw.recipe.copy(yieldPieces = newYield), lines)
     }
 
     suspend fun deleteRecipe(id: Long) = db.withTransaction {

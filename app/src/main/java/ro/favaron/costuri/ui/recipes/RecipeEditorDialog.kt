@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -46,6 +47,7 @@ import ro.favaron.costuri.data.RecipeEntity
 import ro.favaron.costuri.data.RecipeLineEntity
 import ro.favaron.costuri.domain.Calc
 import ro.favaron.costuri.domain.Fmt
+import ro.favaron.costuri.domain.RecipeScaling
 import ro.favaron.costuri.domain.RecipeView
 import ro.favaron.costuri.domain.Validate
 import ro.favaron.costuri.domain.unitPrice
@@ -97,6 +99,8 @@ fun RecipeEditorDialog(
     var showErrors by remember { mutableStateOf(false) }
     var addQuery by remember { mutableStateOf("") }
     var newIngredientName by remember { mutableStateOf<String?>(null) }
+    var scaleOpen by remember { mutableStateOf(false) }
+    var scaleError by remember { mutableStateOf<String?>(null) }
 
     val byId = ingredients.associateBy { it.id }
     val nameError = if (name.isBlank()) "Obligatoriu" else null
@@ -166,6 +170,20 @@ fun RecipeEditorDialog(
                                 label = "Randament (bucăți)", integer = true, suffix = "buc",
                                 error = yieldError, modifier = Modifier.width(200.dp),
                             )
+                            OutlinedButton(
+                                onClick = {
+                                    scaleError = when {
+                                        yieldPieces == null -> "Corectează întâi randamentul."
+                                        lineQty.any { it.first == null } -> "Corectează întâi cantitățile liniilor."
+                                        else -> null
+                                    }
+                                    if (scaleError == null) scaleOpen = true
+                                },
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                            ) {
+                                Icon(Icons.Filled.Refresh, null)
+                                Text(" Scalează")
+                            }
                             NumberTextField(
                                 value = priceText, onValueChange = { priceText = it },
                                 label = "Preț vânzare / buc (opțional)", suffix = "RON",
@@ -173,10 +191,13 @@ fun RecipeEditorDialog(
                             )
                         }
                         Text(
-                            "Cantitățile de mai jos sunt pentru toată rețeta (toate bucățile).",
+                            "Cantitățile de mai jos sunt pentru toată rețeta (toate bucățile). " +
+                                "Modificarea directă a randamentului doar corectează numărul de bucăți; " +
+                                "pentru a înmulți și cantitățile folosește „Scalează”.",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
+                        scaleError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
                     }
                     item {
                         Text("Ingrediente", style = MaterialTheme.typography.titleMedium)
@@ -253,6 +274,25 @@ fun RecipeEditorDialog(
                 }
             }
         }
+    }
+
+    if (scaleOpen && yieldPieces != null) {
+        ScaleRecipeDialog(
+            recipeName = name.ifBlank { "rețeta" },
+            currentYield = yieldPieces,
+            onDismiss = { scaleOpen = false },
+            onScale = { newYield ->
+                lines.indices.forEach { i ->
+                    val l = lines[i]
+                    val ing = l.ingredientId?.let { byId[it] }
+                    val consumable = ing?.isConsumable ?: false
+                    val fixed = if (ing != null) consumable && l.fixed else l.fixed
+                    val q = RecipeScaling.scaleQuantity(lineQty[i].first!!, yieldPieces, newYield, consumable, fixed)
+                    lines[i] = l.copy(qtyText = Fmt.edit(q))
+                }
+                yieldText = newYield.toString()
+            },
+        )
     }
 
     newIngredientName?.let { initialName ->

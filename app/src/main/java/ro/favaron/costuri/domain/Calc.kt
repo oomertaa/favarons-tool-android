@@ -52,7 +52,7 @@ object Calc {
     }
 
     /** Avoids exponent forms like 2.4E+2 so in-memory values equal their stored text. */
-    private fun plain(v: BigDecimal): BigDecimal = if (v.scale() < 0) v.setScale(0) else v
+    fun plain(v: BigDecimal): BigDecimal = if (v.scale() < 0) v.setScale(0) else v
 
     fun revenue(pricePerPiece: BigDecimal, pieces: Int): BigDecimal = pricePerPiece.multiply(BigDecimal(pieces))
 

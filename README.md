@@ -185,7 +185,7 @@ database, so no device is needed.
 
 ## 9. Font
 
-All text uses an Arial Narrow–style font at **12 sp**, with titles in bold.
+All text uses an Arial Narrow–style font, at the standard Material 3 sizes.
 Arial Narrow itself is a commercial font, so the app bundles **Liberation Sans
 Narrow** instead. It is free and metric-compatible with Arial Narrow (same
 character widths), and covers all Romanian diacritics. Its license is in
@@ -195,9 +195,6 @@ If you own Arial Narrow (it comes with Microsoft Office) and want the original,
 copy `ARIALN.TTF` and `ARIALNB.TTF` over
 `app/src/main/res/font/app_font_regular.ttf` and `app_font_bold.ttf` (keep
 these names), then rebuild.
-
-The size is in sp, so Android's *Settings → Display → Font size* still scales
-it. The size is set in one place, `APP_FONT_SIZE` in `ui/theme/Theme.kt`.
 
 ## 10. Project layout
 

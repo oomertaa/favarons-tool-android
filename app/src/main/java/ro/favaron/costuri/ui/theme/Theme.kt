@@ -11,7 +11,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import ro.favaron.costuri.R
 
 private val Light = lightColorScheme(
@@ -54,35 +53,27 @@ val AppFont = FontFamily(
     Font(R.font.app_font_bold, FontWeight.Bold),
 )
 
-/** Every text style uses the narrow font at 12 sp; titles are bold. */
+/** Default Material 3 sizes and weights; only the font family is replaced. */
 private val AppTypography: Typography = Typography().let { base ->
-    fun TextStyle.app(bold: Boolean = false) = copy(
-        fontFamily = AppFont,
-        fontSize = APP_FONT_SIZE,
-        lineHeight = 16.sp,
-        letterSpacing = 0.sp,
-        fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
-    )
+    fun TextStyle.app() = copy(fontFamily = AppFont)
     base.copy(
-        displayLarge = base.displayLarge.app(true),
-        displayMedium = base.displayMedium.app(true),
-        displaySmall = base.displaySmall.app(true),
-        headlineLarge = base.headlineLarge.app(true),
-        headlineMedium = base.headlineMedium.app(true),
-        headlineSmall = base.headlineSmall.app(true),
-        titleLarge = base.titleLarge.app(true),
-        titleMedium = base.titleMedium.app(true),
-        titleSmall = base.titleSmall.app(true),
+        displayLarge = base.displayLarge.app(),
+        displayMedium = base.displayMedium.app(),
+        displaySmall = base.displaySmall.app(),
+        headlineLarge = base.headlineLarge.app(),
+        headlineMedium = base.headlineMedium.app(),
+        headlineSmall = base.headlineSmall.app(),
+        titleLarge = base.titleLarge.app(),
+        titleMedium = base.titleMedium.app(),
+        titleSmall = base.titleSmall.app(),
         bodyLarge = base.bodyLarge.app(),
         bodyMedium = base.bodyMedium.app(),
         bodySmall = base.bodySmall.app(),
-        labelLarge = base.labelLarge.app(true),
+        labelLarge = base.labelLarge.app(),
         labelMedium = base.labelMedium.app(),
         labelSmall = base.labelSmall.app(),
     )
 }
-
-val APP_FONT_SIZE = 12.sp
 
 @Composable
 fun FavaronTheme(content: @Composable () -> Unit) {

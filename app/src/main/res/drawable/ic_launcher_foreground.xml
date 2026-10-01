@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple cupcake: frosting dome + cherry + wrapper. 108dp canvas, art in the 66dp safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:fillColor="#C2185B"
+        android:pathData="M54,30 a4.5,4.5 0 1,1 -0.01,0 z" />
+    <path android:fillColor="#F8BBD0"
+        android:pathData="M30,56 C30,44 41,36 54,36 C67,36 78,44 78,56 Z" />
+    <path android:fillColor="#8D5524"
+        android:pathData="M33,58 L75,58 L69,80 L39,80 Z" />
+    <path android:fillColor="#6D3F18"
+        android:pathData="M44,58 L46,80 L48,80 L47,58 Z M54,58 L53.2,80 L54.8,80 L54,58 Z M64,58 L62,80 L60,80 L61,58 Z" />
+</vector>

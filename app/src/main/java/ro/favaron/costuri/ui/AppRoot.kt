@@ -1,13 +1,11 @@
 package ro.favaron.costuri.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
@@ -38,14 +36,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
-import ro.favaron.costuri.R
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
@@ -67,9 +61,6 @@ private val DESTS = listOf(
     Dest("retete", "Rețete", Icons.Filled.Star),
     Dest("vanzari", "Vânzări", Icons.Filled.ShoppingCart),
 )
-
-/** Opacity of the "Mama Macaroana" logo behind the pages (1 = fully opaque). */
-const val BACKGROUND_LOGO_ALPHA = 0.45f
 
 @Composable
 fun AppRoot() {
@@ -134,13 +125,6 @@ fun AppRoot() {
                         ) else Modifier,
                     ),
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.bg_mama_macaroana),
-                        contentDescription = null,
-                        contentScale = ContentScale.Fit,
-                        alpha = BACKGROUND_LOGO_ALPHA,
-                        modifier = Modifier.align(Alignment.Center).fillMaxWidth(0.8f).padding(24.dp),
-                    )
                     NavHost(nav, startDestination = DESTS[0].route) {
                         composable(DESTS[0].route) { IngredientsScreen() }
                         composable(DESTS[1].route) { RecipesScreen() }

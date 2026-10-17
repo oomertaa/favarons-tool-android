@@ -188,8 +188,6 @@ database, so no device is needed.
 - Text uses the system font at the Material 3 sizes × 1.15 (`FONT_SCALE` in
   `ui/theme/Theme.kt`).
 - The navigation strip on the left has its own background and a shadow.
-- The *Mama Macaroana* logo is shown behind the pages, partly transparent
-  (`BACKGROUND_LOGO_ALPHA` in `ui/AppRoot.kt`).
 
 ## 10. Project layout
 
